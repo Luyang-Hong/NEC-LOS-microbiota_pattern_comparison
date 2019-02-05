@@ -7,6 +7,7 @@ library(dplyr)
 library(stringr)
 library(stringi)
 library(ggpubr)
+library(cowplot)
 
 #import alpha diversity
 alpha <- read_excel("alpha.xlsx", col_types = c("text", 
@@ -209,40 +210,110 @@ ggplot(meta_alpha_nec,
                      values = c("gray", "dodgerblue","sienna", "red")) +
   labs(title = "alpha diversity", 
        x = "Age", 
-       y = "Shannon Index")
+       y = "Shannon Index") + 
 
 ##original matrix and alpha diversity
 matrix_alpha <- inner_join(select(matrix, c("sample", "time", "time1")), alpha, by = "sample")
 meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
-  #group by group-time interval and calculate mean shannon
-  meta_matrix_alpha %>% group_by(time) %>% 
-    summarise_at(vars(-shannon), funs(mean(., na.rm=TRUE)))
   
-##matrix1 and alphadiversity
-matrix1_alpha <- inner_join(select(matrix1, c("sample", "time", "time1")), alpha, by = "sample")
-meta_matrix1_alpha <- inner_join(metadata, matrix1_alpha, by = "sample")
   #specify the comparisons
   shannon_comparisons <- list(c("NEC", "LOS"), c("NEC", "control"), c("control", "LOS"))
   #ggpubr x = time , color = group, y = shannon
   ggboxplot(data = meta_matrix_alpha, x = "time1", y = "shannon", 
             color = "group", palette = c("gray", "dodgerblue","sienna"), 
-            add = "jitter",  
+            add = "jitter", 
+            width = 0.5, 
             title = "Alpha diversity over post partum time interval",
             xlab = "Time Interval", ylab = "Shannon Index") +
     #stat_compare_means(aes(group = group), label = "p.format")
     stat_compare_means(aes(group = group), label = "p.format")  #add pairwise comparisons p-value
   
-  ggboxplot(data = meta_matrix1_alpha, x = "group", y = "shannon", 
-            color = "group", palette = c("gray", "sienna", "dodgerblue"), 
-            facet.by = "time1", 
-            add = "jitter",  
-            title = "Post-partum untill peri-onset comparison of alpha diversity",
-            xlab = "Time Interval", ylab = "Shannon Index") +
+    ggboxplot(data = meta_matrix_alpha, x = "group", y = "shannon", 
+              color = "group", palette = c("gray", "sienna", "dodgerblue"), 
+              facet.by = "time1", 
+              add = "jitter",  
+              ylim = c(0,5.8), 
+              xlim = c(1,3),
+              title = "Alpha diversity over post partum time interval",
+              xlab = "Time Interval", ylab = "Shannon Index") +
     #stat_compare_means(aes(group = group), label = "p.format")
-    stat_compare_means(comparisons = shannon_comparisons) + #add pairwise comparisons p-value
-    facet_grid(.~time1)
-
-
+    stat_compare_means(aes(group =group), label.y = 5, label.x = 1.1) +
+    stat_compare_means(comparisons = c("NEC", "LOS"), method = "wilcox.test") +
+    stat_compare_means(comparisons = shannon_comparisons, method = "wilcox.test") + #add pairwise comparisons p-value
+    facet_wrap(.~time1, ncol = 4)
+    
+      #NEC group alpha diversity changes
+      meta_matrix_alpha_nec <- meta_matrix_alpha[meta_matrix_alpha$group == "NEC", ]
+      #plot nec group alpha diversity over time
+      alphanec <- ggboxplot(data = meta_matrix_alpha_nec, x = "time1", y = "shannon", 
+                          color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                          add = "jitter",  
+                          ylim = c(0,4.2), 
+                          width = 0.7, 
+                          #xlim = c(1,3),
+                          #title = "Alpha diversity over post partum time interval",
+                          xlab = "Time Interval", ylab = "Shannon Index" 
+                          ) +
+                      stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+                      rremove("x.text") + rremove("x.ticks") +rremove("legend.title") + rremove("legend")
+      alphanec
+      #los group alpha diversity changes
+      meta_matrix_alpha_los <- meta_matrix_alpha[meta_matrix_alpha$group == "LOS", ]
+      #plot los group alpha diversity over time
+      alphalos <- ggboxplot(data = meta_matrix_alpha_los, x = "time1", y = "shannon", 
+                            color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                            add = "jitter",  
+                            ylim = c(0,4.2), 
+                            width = 0.7, 
+                            #xlim = c(1,3),
+                            #title = "Post-partum alpha diversity over time",
+                            xlab = "Time Interval", ylab = "Shannon Index") +
+        stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+        rremove("x.text") + rremove("x.ticks") +rremove("legend.title") + rremove("legend")
+      alphalos
+      #control group alpha diversity changes
+      meta_matrix_alpha_control <- meta_matrix_alpha[meta_matrix_alpha$group == "control", ]
+      #plot control group alpha diversity over time
+      alphacontrol <- ggboxplot(data = meta_matrix_alpha_control, x = "time1", y = "shannon", 
+                                color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                                add = "jitter",  
+                                ylim = c(0,4.2), 
+                                width = 0.7,
+                                #xlim = c(1,3),
+                                #title = "Alpha diversity over post partum time interval",
+                                xlab = "Time Interval", ylab = "Shannon Index") +
+        stat_compare_means(aes(group = time1), label.y = 4, label.x = 1) + 
+        rremove("x.text") + rremove("x.ticks") +rremove("legend.title") + rremove("legend")
+      alphacontrol
+      #alpha_groups legend for all
+        #plot a plot merely for legend
+        alphaleg <- ggboxplot(data = meta_matrix_alpha_los, x = "time1", y = "shannon", 
+                              color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                              add = "jitter",  
+                              ylim = c(0,4.2), 
+                              width = 0.7, 
+                              #xlim = c(1,3),
+                              #title = "Post-partum alpha diversity over time",
+                              xlab = "Time Interval", ylab = "Shannon Index", 
+                              legend.title = "Time Interval") +
+          stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+          rremove("x.text") + rremove("x.ticks") 
+        alphaleg <- ggpar(alphaleg, legend = "right")
+          #get legend of the "merely for legend" plot :)
+          alpha_groups_leg <- get_legend(alphaleg) %>% as_ggplot()
+          alpha_groups_leg
+      #ggarrange alpha diversity change over time plots for all groups
+      alpha_groups <- ggarrange(alphanec, alphalos,alphacontrol, alpha_groups_leg,
+                                labels = c('a', 'b', 'c') 
+                                )
+      alpha_groups <- ggdraw() +
+        draw_plot(alphanec, x = 0, y = 0.5, width = 0.5, height = 0.5) +
+        draw_plot(alphalos, x = 0, y = 0.5, width = 0.5, height = 0.5) +
+        draw_plot(alphacontrol, x = 0, y = 0.5, width = 0.5, height = 0.5) +
+        draw_plot(alpha_groups_leg, x = 0, y = 0.5, width = 0.5, height = 0.5) +
+        
+      alpha_groups
+      
   #specify the comparisons
   shannon_comparisons <- list(c("NEC", "LOS"), c("NEC", "control"), c("control", "LOS"))
   #ggpubr x = time , color = group, y = shannon
@@ -286,6 +357,5 @@ meta_matrix2_alpha <- inner_join(metadata, matrix2_alpha, by = "sample")
             xlab = "Time Interval", ylab = "Shannon Index") +
     #stat_compare_means(aes(group = group), label = "p.format")
     stat_compare_means(aes(group = group), label = "p.format") + #add pairwise comparisons p-value
-    facet_grid(.~time1)
-
+    facet_wrap(.~time1)
 
