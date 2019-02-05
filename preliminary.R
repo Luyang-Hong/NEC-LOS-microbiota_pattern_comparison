@@ -282,7 +282,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                                 #xlim = c(1,3),
                                 #title = "Alpha diversity over post partum time interval",
                                 xlab = "Time Interval", ylab = "Shannon Index (control)") +
-        stat_compare_means(aes(group = time1), label.y = 4, label.x = 1) + 
+        stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
         rremove("x.text") + rremove("x.ticks") +rremove("legend.title") + rremove("legend")
       alphacontrol
       #alpha_groups legend for all
