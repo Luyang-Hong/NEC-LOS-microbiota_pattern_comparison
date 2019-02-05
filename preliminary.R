@@ -228,19 +228,21 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
     #stat_compare_means(aes(group = group), label = "p.format")
     stat_compare_means(aes(group = group), label = "p.format")  #add pairwise comparisons p-value
   
-    ggboxplot(data = meta_matrix_alpha, x = "group", y = "shannon", 
-              color = "group", palette = c("gray", "sienna", "dodgerblue"), 
-              facet.by = "time1", 
-              add = "jitter",  
-              ylim = c(0,5.8), 
-              xlim = c(1,3),
-              title = "Alpha diversity over post partum time interval",
-              xlab = "Time Interval", ylab = "Shannon Index") +
-    #stat_compare_means(aes(group = group), label = "p.format")
-    stat_compare_means(aes(group =group), label.y = 5, label.x = 1.1) +
-    stat_compare_means(comparisons = c("NEC", "LOS"), method = "wilcox.test") +
-    stat_compare_means(comparisons = shannon_comparisons, method = "wilcox.test") + #add pairwise comparisons p-value
-    facet_wrap(.~time1, ncol = 4)
+    alpha_time <- ggboxplot(data = meta_matrix_alpha, x = "group", y = "shannon", 
+                            color = "group", palette = c("gray", "sienna", "dodgerblue"), 
+                            facet.by = "time1", 
+                            add = "jitter",  
+                            ylim = c(0,5.5), 
+                            xlim = c(1,3),
+                            #title = "Alpha diversity over post partum time interval",
+                            xlab = "Time Interval", ylab = "Shannon Index") +
+                    #stat_compare_means(aes(group = group), label = "p.format")
+                    stat_compare_means(aes(group =group), label.y = 5.2, label.x = 1.1) +
+                    stat_compare_means(comparisons = c("NEC", "LOS"), method = "wilcox.test") +
+                    stat_compare_means(comparisons = shannon_comparisons, method = "wilcox.test") + #add pairwise comparisons p-value
+                    facet_wrap(.~time1, ncol = 4)  
+    alpha_time <- ggpar(alpha_time, legend = "right", legend.title = "groups")
+    alpha_time
     
       #NEC group alpha diversity changes
       meta_matrix_alpha_nec <- meta_matrix_alpha[meta_matrix_alpha$group == "NEC", ]
