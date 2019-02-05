@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1549318963413.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "BCBDE14A",
+    "lastKnownWriteTime" : 1549334618,
+    "last_content_update" : 1549340812768,
+    "path" : "~/Documents/NECLOS384/new-analysis/preliminary.R",
+    "project_path" : "preliminary.R",
+    "properties" : {
+        "cursorPosition" : "259,6",
+        "scrollLine" : "240",
+        "source_window_id" : "w16cns4ge7esa",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

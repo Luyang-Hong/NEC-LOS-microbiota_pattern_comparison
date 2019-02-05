@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1549338598956.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EFB9F067",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1549338598956,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "id" : "4914f339e50f49098f44f0e80c2c89ce",
+        "name" : "alphalos",
+        "title" : "alphalos"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "object_explorer"
+}
