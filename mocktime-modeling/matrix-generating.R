@@ -58,3 +58,5 @@ matrix2 <- matrix2[str_extract(matrix2$time, c("NEC2-")) %>% is.na(), ]
 write.csv(matrix, "matrix.csv")
 write.csv(matrix1, "matrix1.csv")
 write.csv(matrix2, "matrix2.csv")
+write.csv(matrix1_average, "matrix1_average.csv")
+write.csv(matrix2_average, "matrix2_average.csv")
