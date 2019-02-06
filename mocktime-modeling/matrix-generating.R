@@ -1,6 +1,7 @@
 library(reshape2) #for melt
 library(dplyr) #for inner.join
 library(stringr) #for finding patterns
+library(stats)
 
 sample <- read.csv("sample.csv", check.names = FALSE)
 timepoint <- read.csv("paste-time2.csv", check.names = FALSE, comment.char = "#")
@@ -84,6 +85,18 @@ write.csv(matrix2_average, "matrix2_average.csv")
 
 
 ##matrix1——alpha
-matrix1_alpha <- inner_join(select(matrix1, c("sample", "time")), alpha, by = "sample")
-matrix1_alpha <- matrix1_alpha[,-1]
-matrix1_alpha <- aggregate(.~time, matrix1_alpha[2:7], mean)
+matrix_alpha <- inner_join(select(matrix, c("sample", "time")), alpha, by = "sample")
+matrix1_alpha <- matrix_alpha[str_extract(matrix_alpha$time, c("-middle disease")) %>% is.na(), ]
+matrix1_alpha <- matrix1_alpha[str_extract(matrix1_alpha$time, c("-late disease")) %>% is.na(), ]
+matrix1_alpha <- matrix1_alpha[str_extract(matrix1_alpha$time, c("-post disease")) %>% is.na(), ]
+matrix1_alpha <- aggregate(.~time, matrix1_alpha[, 2:7], mean)
+
+##matrix1_alpha
+matrix2_alpha <- matrix_alpha[str_extract(matrix_alpha$time, c("control")) %>% is.na(), ]
+matrix2_alpha <- matrix2_alpha[str_extract(matrix2_alpha$time, c("NEC2-")) %>% is.na(), ]
+matrix2_alpha <- aggregate(.~time, matrix2_alpha[, 2:7], mean)
+
+write.csv(matrix1_alpha, "matrix1_alpha.csv")
+write.csv(matrix1_alpha, "matrix2_alpha.csv")
+
+                           
