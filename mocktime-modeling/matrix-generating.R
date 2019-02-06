@@ -3,8 +3,28 @@ library(dplyr) #for inner.join
 library(stringr) #for finding patterns
 
 sample <- read.csv("sample.csv", check.names = FALSE)
-timepoint <- read.csv("paste-time.csv", check.names = FALSE, comment.char = "#")
+timepoint <- read.csv("paste-time2.csv", check.names = FALSE, comment.char = "#")
 otu <- read.csv("otu.csv", check.names = FALSE)
+
+#import alpha diversity
+alpha <- read_csv("alpha.csv", col_types = cols(ace = col_number(), 
+                                                chao = col_number(), coverage = col_number(), 
+                                                shannon = col_number(), simpson = col_number(), 
+                                                sobs = col_number()))
+colnames(alpha)[1] <- "sample"
+rownames(alpha) <- alpha$sample
+#calculate B0620 B3818 B4025 samples' alphadiversity
+alpha <- rbind(alpha, 
+               #B0620 = B0619 + (B0619-B0622)/3
+               c("B0620", alpha["B0619", 2:7] %>% as.numeric() + (alpha["B0622", 2:7] %>% as.numeric() - alpha["B0619", 2:7] %>% as.numeric())/3), 
+               #B3818 = (B3815 + B3821)/2
+               c("B3818", (alpha["B3815", 2:7] %>% as.numeric() + alpha["B3821", 2:7] %>% as.numeric())/2),
+               #B4025 = B4021 + 4*(B4028-B4021)/7
+               c("B4025", alpha["B4021", 2:7] %>% as.numeric()+ 4*(alpha["B4028", 2:7] %>% as.numeric() - alpha["B4021", 2:7] %>% as.numeric())/7))
+  #define rownames of alpha
+  rownames(alpha) <- alpha$sample
+  #change shannon simpson... as numeric
+  alpha[, 2:7] <- sapply(alpha[, 2:7], as.numeric)
 
 #process sample, aim: if the samplename has a real sample
 #remove patno of sample
@@ -28,9 +48,10 @@ sampletime <- sampletime[!is.na(sampletime$ifsample), ]
 ##otu
 #tranposeOTU and rename colnames by otu name
 otu <- t(otu)
-colnames(otu) <- otu[9, ]
-otu <- otu[-c(1:9), ]
-otu <- as.data.frame(otu)
+colnames(otu) <- otu[9, ] #colnames = otunames
+otu <- otu[-c(1:9), ] #remove domain~species taxa
+mode(otu) <- "numeric"
+otu <- data.frame(otu)
 otu <- otu[-196,]
 otu$sample <- rownames(otu)
 
@@ -60,3 +81,9 @@ write.csv(matrix1, "matrix1.csv")
 write.csv(matrix2, "matrix2.csv")
 write.csv(matrix1_average, "matrix1_average.csv")
 write.csv(matrix2_average, "matrix2_average.csv")
+
+
+##matrix1——alpha
+matrix1_alpha <- inner_join(select(matrix1, c("sample", "time")), alpha, by = "sample")
+matrix1_alpha <- matrix1_alpha[,-1]
+matrix1_alpha <- aggregate(.~time, matrix1_alpha[2:7], mean)
