@@ -46,12 +46,13 @@ matrix <- matrix[str_extract(matrix$time, "-TRUE") %>% is.na(), ]
 matrix1 <- matrix[str_extract(matrix$time, c("-middle disease")) %>% is.na(), ]
 matrix1 <- matrix1[str_extract(matrix1$time, c("-late disease")) %>% is.na(), ]
 matrix1 <- matrix1[str_extract(matrix1$time, c("-post disease")) %>% is.na(), ]
-
-#matrix1 <- matrix[str_extract(matrix$time, c("-middle disease", "-late disease", "-post disease")) %>% is.na(), ]
-
+  #按time变量分组求均值
+  matrix1_average <- aggregate(.~time, matrix1[2:330], mean)
 ##方案2 比较nec和los
 matrix2 <- matrix[str_extract(matrix$time, c("control")) %>% is.na(), ]
 matrix2 <- matrix2[str_extract(matrix2$time, c("NEC2-")) %>% is.na(), ]
+  #按time变量分组求均值
+  matrix2_average <- aggregate(.~time, matrix2[2:330], mean)
 
 #write
 write.csv(matrix, "matrix.csv")

@@ -28,7 +28,7 @@ rownames(alpha) <- alpha$sample
   #calculate B0620 B3818 B4025 samples' alphadiversity
   alpha <- rbind(alpha, 
                  #B0620 = B0619 + (B0619-B0622)/3
-                 c("B0620", alpha["B0619", 2:7] %>% as.numeric() + (alpha["B0622", 2:7] %>% as.numeric() - alpha["B0619", 2:7]) %>% as.numeric()/3), 
+                 c("B0620", alpha["B0619", 2:7] %>% as.numeric() + (alpha["B0622", 2:7] %>% as.numeric() - alpha["B0619", 2:7] %>% as.numeric())/3), 
                  #B3818 = (B3815 + B3821)/2
                  c("B3818", (alpha["B3815", 2:7] %>% as.numeric() + alpha["B3821", 2:7] %>% as.numeric())/2),
                  #B4025 = B4021 + 4*(B4028-B4021)/7
@@ -283,6 +283,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     x = c(0, 0.5, 0), 
                     y = c(1, 1, 0.5))
   sobs_groups
+  
 
 
   

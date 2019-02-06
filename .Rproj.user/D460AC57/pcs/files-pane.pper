@@ -1,6 +1,14 @@
 {
-    "path" : "~/Documents/NECLOS384/new-analysis",
+    "path" : "~/Documents/NECLOS384/new-analysis/mocktime-modeling",
     "sortOrder" : [
+        {
+            "ascending" : false,
+            "columnIndex" : 4
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 3
+        },
         {
             "ascending" : true,
             "columnIndex" : 2
