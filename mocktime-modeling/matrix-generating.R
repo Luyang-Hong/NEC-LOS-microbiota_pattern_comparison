@@ -2,6 +2,7 @@ library(reshape2) #for melt
 library(dplyr) #for inner.join
 library(stringr) #for finding patterns
 library(stats)
+library(readr)
 
 sample <- read.csv("sample.csv", check.names = FALSE)
 timepoint <- read.csv("paste-time2.csv", check.names = FALSE, comment.char = "#")
@@ -97,6 +98,6 @@ matrix2_alpha <- matrix2_alpha[str_extract(matrix2_alpha$time, c("NEC2-")) %>% i
 matrix2_alpha <- aggregate(.~time, matrix2_alpha[, 2:7], mean)
 
 write.csv(matrix1_alpha, "matrix1_alpha.csv")
-write.csv(matrix1_alpha, "matrix2_alpha.csv")
+write.csv(matrix2_alpha, "matrix2_alpha.csv")
 
                            
