@@ -1,0 +1,37 @@
+Sample,Time,Treat,Subject
+LOS1-early post partum,1,1,LOS1
+LOS1-early pre-onset,2,1,LOS1
+LOS1-late pre-onset,3,1,LOS1
+LOS1-early disease,4,1,LOS1
+LOS1-middle disease,5,1,LOS1
+LOS1-late disease,6,1,LOS1
+LOS2-early post partum,1,1,LOS2
+LOS2-early pre-onset,2,1,LOS2
+LOS2-late pre-onset,3,1,LOS2
+LOS2-early disease,4,1,LOS2
+LOS2-middle disease,5,1,LOS2
+LOS2-late disease,6,1,LOS2
+LOS3-early post partum,1,1,LOS3
+LOS3-early pre-onset,2,1,LOS3
+LOS3-late pre-onset,3,1,LOS3
+LOS3-early disease,4,1,LOS3
+LOS3-middle disease,5,1,LOS3
+LOS3-late disease,6,1,LOS3
+NEC1-early post partum,1,2,NEC1
+NEC1-early pre-onset,2,2,NEC1
+NEC1-late pre-onset,3,2,NEC1
+NEC1-early disease,4,2,NEC1
+NEC1-middle disease,5,2,NEC1
+NEC1-late disease,6,2,NEC1
+NEC3-early post partum,1,2,NEC3
+NEC3-early pre-onset,2,2,NEC3
+NEC3-late pre-onset,3,2,NEC3
+NEC3-early disease,4,2,NEC3
+NEC3-middle disease,5,2,NEC3
+NEC3-late disease,6,2,NEC3
+NEC4-early post partum,1,2,NEC4
+NEC4-early pre-onset,2,2,NEC4
+NEC4-late pre-onset,3,2,NEC4
+NEC4-early disease,4,2,NEC4
+NEC4-middle disease,5,2,NEC4
+NEC4-late disease,6,2,NEC4

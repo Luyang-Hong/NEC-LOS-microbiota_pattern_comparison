@@ -1,0 +1,81 @@
+Sample,Time,Treat,Subject
+control1-early disease,4,0,control1
+control1-early post partum,1,0,control1
+control1-early pre-onset,2,0,control1
+control1-late pre-onset,3,0,control1
+control10-early disease,4,0,control10
+control10-early post partum,1,0,control10
+control10-early pre-onset,2,0,control10
+control10-late pre-onset,3,0,control10
+control11-early disease,4,0,control11
+control11-early post partum,1,0,control11
+control11-early pre-onset,2,0,control11
+control11-late pre-onset,3,0,control11
+control12-early disease,4,0,control12
+control12-early post partum,1,0,control12
+control12-early pre-onset,2,0,control12
+control12-late pre-onset,3,0,control12
+control13-early disease,4,0,control13
+control13-early post partum,1,0,control13
+control13-early pre-onset,2,0,control13
+control13-late pre-onset,3,0,control13
+control14-early disease,4,0,control14
+control14-early post partum,1,0,control14
+control14-early pre-onset,2,0,control14
+control14-late pre-onset,3,0,control14
+control15-early disease,4,0,control15
+control15-early post partum,1,0,control15
+control15-early pre-onset,2,0,control15
+control15-late pre-onset,3,0,control15
+control16-early disease,4,0,control16
+control16-early post partum,1,0,control16
+control16-early pre-onset,2,0,control16
+control16-late pre-onset,3,0,control16
+control17-early disease,4,0,control17
+control17-early post partum,1,0,control17
+control17-early pre-onset,2,0,control17
+control17-late pre-onset,3,0,control17
+control2-early disease,4,0,control2
+control2-early post partum,1,0,control2
+control2-early pre-onset,2,0,control2
+control2-late pre-onset,3,0,control2
+control3-early disease,4,0,control3
+control3-early post partum,1,0,control3
+control3-early pre-onset,2,0,control3
+control3-late pre-onset,3,0,control3
+control4-early disease,4,0,control4
+control4-early post partum,1,0,control4
+control4-early pre-onset,2,0,control4
+control4-late pre-onset,3,0,control4
+control5-early disease,4,0,control5
+control5-early post partum,1,0,control5
+control5-early pre-onset,2,0,control5
+control5-late pre-onset,3,0,control5
+control6-early disease,4,0,control6
+control6-early post partum,1,0,control6
+control6-early pre-onset,2,0,control6
+control6-late pre-onset,3,0,control6
+control7-early disease,4,0,control7
+control7-early post partum,1,0,control7
+control7-early pre-onset,2,0,control7
+control7-late pre-onset,3,0,control7
+control8-early disease,4,0,control8
+control8-early post partum,1,0,control8
+control8-early pre-onset,2,0,control8
+control8-late pre-onset,3,0,control8
+control9-early disease,4,0,control9
+control9-early post partum,1,0,control9
+control9-early pre-onset,2,0,control9
+control9-late pre-onset,3,0,control9
+LOS1-early disease,4,1,LOS1
+LOS1-early post partum,1,1,LOS1
+LOS1-early pre-onset,2,1,LOS1
+LOS1-late pre-onset,3,1,LOS1
+LOS2-early disease,4,1,LOS2
+LOS2-early post partum,1,1,LOS2
+LOS2-early pre-onset,2,1,LOS2
+LOS2-late pre-onset,3,1,LOS2
+LOS3-early disease,4,1,LOS3
+LOS3-early post partum,1,1,LOS3
+LOS3-early pre-onset,2,1,LOS3
+LOS3-late pre-onset,3,1,LOS3
