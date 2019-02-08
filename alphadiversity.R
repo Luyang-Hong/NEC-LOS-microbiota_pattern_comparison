@@ -150,6 +150,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                         color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
                         add = "jitter",  
                         ylim = c(0,4.2), 
+                        palette = "startrek",
                         #width = 0.7, 
                         #xlim = c(1,3),
                         #title = "Post-partum alpha diversity over time",
@@ -164,7 +165,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   #plot control group alpha diversity over time
   shannoncontrol <- ggboxplot(data = meta_matrix_shannon_control, x = "time1", y = "shannon", 
                             color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
-                            add = "jitter",  
+                            add = "jitter", 
+                            palette = "startrek",
                             ylim = c(0,4.2), 
                             width = 0.7,
                             #xlim = c(1,3),
@@ -180,6 +182,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   shannonleg <- ggboxplot(data = meta_matrix_shannon_los, x = "time1", y = "shannon", 
                         color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
                         add = "jitter",  
+                        palette = "startrek",
                         ylim = c(0,4.2), 
                         width = 0.7, 
                         #xlim = c(1,3),
@@ -210,7 +213,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   #plot nec group sobs diversity over time
   sobsnec <- ggboxplot(data = meta_matrix_sobs_nec, x = "time1", y = "sobs", 
                        color = "time1", 
-                       #palette = c("gray", "sienna", "dodgerblue"), 
+                       palette = "startrek",
                        add = "jitter",  
                        ylim = c(0,238), 
                        width = 0.7, 
@@ -223,11 +226,18 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   sobsnec
+  #zuoyige
+  meta_matrix_sobs_nec_mean <- aggregate(. ~ patID, meta_matrix_sobs_nec[17], mean)
+  sobsnecline <- ggline(data = meta_matrix_sobs_nec_mean, x = "dol", y = "sobs", 
+                           color = "PatNo", fill = "PatNo", 
+                           palette = "lancet")
+  sobsnecline
   #los group sobs diversity changes
   meta_matrix_sobs_los <- meta_matrix_alpha[meta_matrix_alpha$group == "LOS", ]
   #plot los group sobs diversity over time
   sobslos <- ggboxplot(data = meta_matrix_sobs_los, x = "time1", y = "sobs", 
-                       color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                       color = "time1", 
+                       palette = "startrek",
                        add = "jitter",  
                        ylim = c(0, 238), 
                        width = 0.7, 
@@ -243,7 +253,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   meta_matrix_sobs_control <- meta_matrix_alpha[meta_matrix_alpha$group == "control", ]
   #plot control group alpha diversity over time
   sobscontrol <- ggboxplot(data = meta_matrix_sobs_control, x = "time1", y = "sobs", 
-                      color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                      color = "time1", 
+                      palette = "startrek", 
                       add = "jitter",  
                       ylim = c(0,238), 
                       width = 0.7,
@@ -258,7 +269,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   #alpha_groups legend for all
   #plot a plot merely for legend
   sobsleg <- ggboxplot(data = meta_matrix_sobs_los, x = "time1", y = "sobs", 
-                       color = "time1", #palette = c("gray", "sienna", "dodgerblue"), 
+                       color = "time1", 
+                       palette = "startrek",
                        add = "jitter",  
                        ylim = c(0,4.2), 
                        width = 0.7, 
@@ -283,6 +295,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     x = c(0, 0.5, 0), 
                     y = c(1, 1, 0.5))
   sobs_groups
+  
+  
   
 
 
