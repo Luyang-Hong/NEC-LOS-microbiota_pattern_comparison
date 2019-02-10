@@ -38,6 +38,7 @@ rownames(alpha) <- alpha$sample
   rownames(alpha) <- alpha$sample
   #change shannon simpson... as numeric
   alpha[, 2:7] <- sapply(alpha[, 2:7], as.numeric)
+  alpha <- as.data.frame(alpha)
 
 #import matrixs
   #import matrix: general matrix
@@ -125,6 +126,13 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   shannon_sobs_time
 
   ##########inter group, time comparisons
+  #specify the comparisons
+  shannon_time_comparisons <- list(c("early post partum", "early pre-onset"), 
+                                  c("early pre-onset", "late pre-onset"), 
+                                  c("late pre-onset", "early disease"), 
+                                  c("early disease", "middle disease"),
+                                  c("middle disease", "late disease"), 
+                                  c("late disease", "post disease"))
   #NEC group shannon diversity changes
   meta_matrix_shannon_nec <- meta_matrix_alpha[meta_matrix_alpha$group == "NEC", ]
   #plot nec group shannon diversity over time
@@ -140,6 +148,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   ) +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons, method = "wilcox.test", 
+                       label.y = c(3.6, 3.4, 1.5, 1.2, 1.8, 2.0)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   shannonnec
@@ -157,6 +167,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                         xlab = "Time Interval", ylab = "Shannon Index (LOS)") +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons, method = "wilcox.test", 
+                       label.y = c(3.6, 3.4, 1.4, 1.8, 1.56, 2.0)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   shannonlos
@@ -174,6 +186,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                             xlab = "Time Interval", ylab = "Shannon Index (control)") +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 4, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons[1:3], method = "wilcox.test", 
+                       label.y = c(3.6, 3.4, 2.0)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   shannoncontrol
@@ -207,7 +221,11 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     y = c(1, 1, 0.5))
   shannon_groups
   
-  ##########inter group, time comparisons
+  ##perform tests
+    compare_means(data = meta_matrix_shannon_nec, shannon ~ time1, method = "wilcox.test")
+  
+  ##########inter group, time comparisons for sobs
+  
   #NEC group sobs diversity changes
   meta_matrix_sobs_nec <- meta_matrix_alpha[meta_matrix_alpha$group == "NEC", ]
   #plot nec group sobs diversity over time
@@ -226,12 +244,6 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   sobsnec
-  #zuoyige
-  meta_matrix_sobs_nec_mean <- aggregate(. ~ patID, meta_matrix_sobs_nec[17], mean)
-  sobsnecline <- ggline(data = meta_matrix_sobs_nec_mean, x = "dol", y = "sobs", 
-                           color = "PatNo", fill = "PatNo", 
-                           palette = "lancet")
-  sobsnecline
   #los group sobs diversity changes
   meta_matrix_sobs_los <- meta_matrix_alpha[meta_matrix_alpha$group == "LOS", ]
   #plot los group sobs diversity over time
