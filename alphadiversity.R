@@ -222,6 +222,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   shannon_groups
   
   ##perform tests
+    aggregate(shannon ~time1, meta_matrix_shannon_nec, mean)
     compare_means(data = meta_matrix_shannon_nec, shannon ~ time1, method = "wilcox.test")
   
   ##########inter group, time comparisons for sobs
