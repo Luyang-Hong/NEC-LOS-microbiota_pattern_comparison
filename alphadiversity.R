@@ -142,6 +142,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                         add = "jitter",  
                         ylim = c(0,4.2), 
                         width = 0.7, 
+                        palette = "startrek", 
                         #xlim = c(1,3),
                         #title = "Alpha diversity over post partum time interval",
                         xlab = "Time Interval", ylab = "Shannon Index (NEC)" 
@@ -220,13 +221,27 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     x = c(0, 0.5, 0), 
                     y = c(1, 1, 0.5))
   shannon_groups
-  
   ##perform tests
+    #inter-time-interval shannon diversity comparison of the same group
+    #nec group
     aggregate(shannon ~time1, meta_matrix_shannon_nec, mean)
     compare_means(data = meta_matrix_shannon_nec, shannon ~ time1, method = "wilcox.test")
-  
+    #los group
+    aggregate(shannon ~time1, meta_matrix_shannon_los, mean)
+    compare_means(data = meta_matrix_shannon_los, shannon ~ time1, method = "wilcox.test")
+    #control group
+    aggregate(shannon ~time1, meta_matrix_shannon_control, mean)
+    compare_means(data = meta_matrix_shannon_control, shannon ~ time1, method = "wilcox.test")
+    
   ##########inter group, time comparisons for sobs
-  
+    #specify the comparisons
+    sobs_time_comparisons <- list(c("early post partum", "early pre-onset"), 
+                                     c("early pre-onset", "late pre-onset"), 
+                                     c("late pre-onset", "early disease"), 
+                                     c("early disease", "middle disease"),
+                                     c("middle disease", "late disease"), 
+                                     c("late disease", "post disease"))
+    
   #NEC group sobs diversity changes
   meta_matrix_sobs_nec <- meta_matrix_alpha[meta_matrix_alpha$group == "NEC", ]
   #plot nec group sobs diversity over time
@@ -242,6 +257,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
   ) +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 230, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons, method = "wilcox.test", 
+                       label.y = c(210, 200, 120, 100, 80, 70)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   sobsnec
@@ -259,6 +276,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                        xlab = "Time Interval", ylab = "sobs (LOS)") +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 230, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons, method = "wilcox.test", 
+                       label.y = c(210, 200, 75, 85, 80, 80, 80)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   sobslos
@@ -276,6 +295,8 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                       xlab = "Time Interval", ylab = "sobs (control)") +
     scale_x_discrete(labels=c("EPP", "EPO", "LPO", "ED", "MD", "LD", "PD")) +
     stat_compare_means(aes(group = time1), label.y = 230, label.x = 1.5) + 
+    stat_compare_means(comparisons = shannon_time_comparisons[1:3], method = "wilcox.test", 
+                       label.y = c(210, 200, 120)) + #adjusting the p values of this comparison at the same )) + #add pairwise comparisons p-value
     rremove("x.ticks") + 
     rremove("legend.title") + rremove("legend")
   sobscontrol
@@ -309,9 +330,6 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     y = c(1, 1, 0.5))
   sobs_groups
   
-  
-  
-
 
   
 
