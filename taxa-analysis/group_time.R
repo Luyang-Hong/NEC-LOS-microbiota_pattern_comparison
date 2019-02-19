@@ -1,7 +1,7 @@
 #####important notes!!!!!!
-# cutoff abundance for this analysis session is 0.5
+# cutoff abundance for this analysis session is 0.05
 #set working directory
-setwd("taxa-analysis")
+setwd()
 
 #load needed libraries
 library(reshape2) #for melt
@@ -155,4 +155,20 @@ pgroup_time <- ggarrange(pgenus_nec_time,
                          labels = c('a', 'b', 'c'))
   # check the concatenate plot
   pgroup_time
+  
+  
 
+# statistical analysis ----------------------------------------------------
+# early post partum 
+  epp <- meta_matrix_genus[which(meta_matrix_genus$time1 == "early post partum"), ]
+  compare_means(`Escherichia-Shigella` ~ group,  data = epp, method = "anova")
+epp_genus_stat <- list()
+  for (i in 5:25) {
+    epp_genus_stat[[i]] <- compare_means((paste(names(epp)[i], " ~ group")) %>% as.formula, data = epp, method = "anova")  
+    }
+
+
+#test
+compare_means(.~group, data=epp[,c("group", names(group)[1])], method = "anova")
+
+  
