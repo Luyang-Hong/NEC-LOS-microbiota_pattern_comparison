@@ -10,6 +10,8 @@ library(tidyverse) #for readr: read_csv
 library(stringr) # for function str_sub
 library(ggsci) #for palette color pick
 library(ggpubr) #for ggarrange common.legends
+library(FSA) #for dunnTest
+library(agricolae) # for lsd test
 
 
 
@@ -155,20 +157,159 @@ pgroup_time <- ggarrange(pgenus_nec_time,
                          labels = c('a', 'b', 'c'))
   # check the concatenate plot
   pgroup_time
-  
-  
 
 # statistical analysis ----------------------------------------------------
+# Utilize "goname" to get nomenclature of genus based on OTU 
+  #matrix 1 OTU significant FROM ZIBR 736, 730, 51, 734, 728, 401, 743, 89, 774 
+  #matrix 2 OTU significant FROM ZIBR 1243, 234, 37
+  goname[which(goname$OTU == "OTU37"), "Genus"]
+# duplicate a data frame for escherichia name
+  meta_matrix_genus_dupe <- meta_matrix_genus # duplicate 
+  colnames(meta_matrix_genus_dupe)[11] <- "Escherichia"
+#define compare strategy
+#  compare <- list(c("NEC", "LOS"), c("NEC", "control"), c("LOS", "control"))
+# compare_means(comparisons = compare, data = epo)
 # early post partum 
-  epp <- meta_matrix_genus[which(meta_matrix_genus$time1 == "early post partum"), ]
-  compare_means(`Escherichia-Shigella` ~ group,  data = epp, method = "anova")
-epp_genus_stat <- list()
+  epp <- meta_matrix_genus_dupe[which(meta_matrix_genus$time1 == "early post partum"), ]
+  compare_means(Escherichia ~ group,  data = epp, method = "anova")
+  epp_genus_stat <- list()
   for (i in 5:25) {
-    epp_genus_stat[[i]] <- compare_means((paste(names(epp)[i], " ~ group")) %>% as.formula, data = epp, method = "anova")  
-    }
+    epp_genus_stat[[i]] <- compare_means((paste(names(epp)[i], " ~ group")) %>% as.formula, 
+                                         data = epp, 
+                                         method = "anova", 
+                                         p.adjust.method = "fdr")  
+  }
+  epp_genus_stat
+
+  #ttest among arbituray two groups
+  t_epp <- setNames(as.data.frame(matrix(ncol = 4, nrow = 25)), c("genus", "NECvsLOS", "NECvscontrol", "LOSvscontrol"))
+  for (i in 5:25) {
+    t_epp$genus[i] <- colnames(epp)[i]
+    t_epp$NECvsLOS[i] <- t.test((paste(names(epp)[i], " ~ group")) %>% as.formula, 
+                                data = epp[which(epp$group != "control"), ])$p.value
+    t_epp$NECvscontrol[i] <- t.test((paste(names(epp)[i], " ~ group")) %>% as.formula, 
+                                    data = epp[which(epp$group != "LOS"), ])$p.value
+    t_epp$LOSvscontrol[i] <- t.test((paste(names(epp)[i], " ~ group")) %>% as.formula, 
+                                    data = epp[which(epp$group != "NEC"), ])$p.value
+  }
+  
 
 
-#test
-compare_means(.~group, data=epp[,c("group", names(group)[1])], method = "anova")
 
+# early pre-onset
+  epo <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "early pre-onset"), ]
+  epo_genus_stat <- list() #wilcoxon
+  for (i in 5:25) {
+    epo_genus_stat[[i]] <- compare_means((paste(names(epo)[i], " ~ group")) %>% as.formula, 
+                                         data = epo, 
+                                         method = "anova", 
+                                         p.adjust.method = "fdr")  
+  }
+  epo_genus_stat
+  
+  #ttest among arbituray two groups
+  t_epo <- setNames(as.data.frame(matrix(ncol = 4, nrow = 25)), c("genus", "NECvsLOS", "NECvscontrol", "LOSvscontrol"))
+  for (i in 5:25) {
+    t_epo$genus[i] <- colnames(epo)[i]
+    t_epo$NECvsLOS[i] <- t.test((paste(names(epo)[i], " ~ group")) %>% as.formula, 
+                                data = epo[which(epo$group != "control"), ])$p.value
+    t_epo$NECvscontrol[i] <- t.test((paste(names(epo)[i], " ~ group")) %>% as.formula, 
+                                data = epo[which(epo$group != "LOS"), ])$p.value
+    t_epo$LOSvscontrol[i] <- t.test((paste(names(epo)[i], " ~ group")) %>% as.formula, 
+                                    data = epo[which(epo$group != "NEC"), ])$p.value
+  }
+# late pre-onset
+  lpo <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "late pre-onset"), ]
+  lpo_genus_stat <- list()
+  for (i in 5:25) {
+    lpo_genus_stat[[i]] <- compare_means((paste(names(lpo)[i], " ~ group")) %>% as.formula, 
+                                         data = lpo, 
+                                         method = "anova", 
+                                         p.adjust.method = "fdr")  
+  }
+  
+  #ttest among arbituray two groups
+  t_lpo <- setNames(as.data.frame(matrix(ncol = 4, nrow = 25)), c("genus", "NECvsLOS", "NECvscontrol", "LOSvscontrol"))
+  for (i in 5:25) {
+    t_lpo$genus[i] <- colnames(lpo)[i]
+    t_lpo$NECvsLOS[i] <- t.test((paste(names(lpo)[i], " ~ group")) %>% as.formula, 
+                                data = lpo[which(lpo$group != "control"), ])$p.value
+    t_lpo$NECvscontrol[i] <- t.test((paste(names(lpo)[i], " ~ group")) %>% as.formula, 
+                                    data = lpo[which(lpo$group != "LOS"), ])$p.value
+    t_lpo$LOSvscontrol[i] <- t.test((paste(names(lpo)[i], " ~ group")) %>% as.formula, 
+                                    data = lpo[which(lpo$group != "NEC"), ])$p.value
+  }
+  
+
+# early disease
+  ed <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "early disease"), ]
+  ed_genus_stat <- list()
+  for (i in 5:25) {
+    ed_genus_stat[[i]] <- compare_means((paste(names(ed)[i], " ~ group")) %>% as.formula, 
+                                         data = ed, 
+                                         method = "anova", 
+                                         p.adjust.method = "BH")  
+  }
+  
+  #ttest among arbituray two groups
+  t_ed <- setNames(as.data.frame(matrix(ncol = 4, nrow = 25)), c("genus", "NECvsLOS", "NECvscontrol", "LOSvscontrol"))
+  for (i in 5:25) {
+    t_ed$genus[i] <- colnames(ed)[i]
+    t_ed$NECvsLOS[i] <- t.test((paste(names(ed)[i], " ~ group")) %>% as.formula, 
+                               data = ed[which(ed$group != "control"), ])$p.value
+    t_ed$NECvscontrol[i] <- t.test((paste(names(ed)[i], " ~ group")) %>% as.formula, 
+                                   data = ed[which(ed$group != "LOS"), ])$p.value
+    t_ed$LOSvscontrol[i] <- t.test((paste(names(ed)[i], " ~ group")) %>% as.formula, 
+                                   data = ed[which(ed$group != "NEC"), ])$p.value
+  }
+  
+ 
+# middle disease
+  md <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "middle disease"), ]
+  md_genus_stat <- list()
+  for (i in 5:25) {
+    md_genus_stat[[i]] <- compare_means((paste(names(md)[i], " ~ group")) %>% as.formula, 
+                                        data = md, 
+                                        method = "anova", 
+                                        p.adjust.method = "BH")  
+  }
+  # t test among two groups
+  t_md <- setNames(as.data.frame(matrix(ncol = 2, nrow = 25)), c("genus", "p.val"))
+  for (i in 5:25) {
+    t_md$genus[i] <- colnames(md)[i]
+    t_md$`p.val`[i] <- t.test((paste(names(md)[i], " ~ group")) %>% as.formula, 
+                               data = md)$p.value
+  }
+  
+
+  # late disease
+  ld <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "late disease"), ]
+  ld_genus_stat <- list()
+  for (i in 5:25) {
+    form <- aov((paste(names(ld)[i], " ~ group")) %>% as.formula, ld)
+    ld_genus_stat[[i]] <- LSD.test(form, 'group')
+    #ld_genus_stat[[i]] <- t.test((paste(names(ld)[i], " ~ group")) %>% as.formula, 
+     #                            data = pd)
+  }
+  names(ld_genus_stat) <- colnames(ld)
+  #t.test 
+  t_ld <- setNames(as.data.frame(matrix(ncol = 2, nrow = 25)), c("genus", "p.val"))
+  for (i in 5:25) {
+    t_md$genus[i] <- colnames(ld)[i]
+    t_ld$`p.val`[i] <- t.test((paste(names(ld)[i], " ~ group")) %>% as.formula, 
+                              data = ld)$p.value
+  }
+  
+  
+  
+  # post disease
+  pd <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "post disease"), ]
+  pd_genus_stat <- list()
+  for (i in 5:25) {
+    #pd_genus_stat[[i]] <- t.test(ld[which(pd$group == "NEC"), names(pd)[i]], 
+                                 #ld[which(pd$group == "LOS"), names(pd)[i]])
+    pd_genus_stat[[i]] <- t.test((paste(names(pd)[i], " ~ group")) %>% as.formula, 
+                                 data = pd) 
+  }
+  names(pd_genus_stat) <- colnames(pd)  
   
