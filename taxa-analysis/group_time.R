@@ -295,7 +295,7 @@ pgroup_time <- ggarrange(pgenus_nec_time,
   #t.test 
   t_ld <- setNames(as.data.frame(matrix(ncol = 2, nrow = 25)), c("genus", "p.val"))
   for (i in 5:25) {
-    t_md$genus[i] <- colnames(ld)[i]
+    t_ld$genus[i] <- colnames(ld)[i]
     t_ld$`p.val`[i] <- t.test((paste(names(ld)[i], " ~ group")) %>% as.formula, 
                               data = ld)$p.value
   }
