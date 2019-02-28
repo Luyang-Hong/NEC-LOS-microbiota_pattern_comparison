@@ -158,7 +158,7 @@ pgroup_time <- ggarrange(pgenus_nec_time,
   # check the concatenate plot
   pgroup_time
 
-# statistical analysis ----------------------------------------------------
+# statistical analysis of genus among group----------------------------------------------------
 # Utilize "goname" to get nomenclature of genus based on OTU 
   #matrix 1 OTU significant FROM ZIBR 736, 730, 51, 734, 728, 401, 743, 89, 774 
   #matrix 2 OTU significant FROM ZIBR 1243, 234, 37
@@ -193,8 +193,6 @@ pgroup_time <- ggarrange(pgenus_nec_time,
                                     data = epp[which(epp$group != "NEC"), ])$p.value
   }
   
-
-
 
 # early pre-onset
   epo <- meta_matrix_genus_dupe[which(meta_matrix_genus_dupe$time1 == "early pre-onset"), ]
