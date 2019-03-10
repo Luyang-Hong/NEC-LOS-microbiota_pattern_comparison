@@ -208,19 +208,29 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
     rremove("x.text") + rremove("x.ticks") 
   shannonleg <- ggpar(shannonleg, legend = "right")
   #get legend of the "merely for legend" plot :)
-  shannon_groups_leg <- get_legend(shannonleg) %>% as_ggplot()
+  shannon_groups_leg <- get_legend(shannonleg + theme(legend.position = "bottom")) %>% as_ggplot()
   shannon_groups_leg
   #ggarrange alpha diversity change over time plots for all groups
   shannon_groups <- ggdraw() +
-    draw_plot(shannonnec, x = 0, y = 0.5, width = 0.5, height = 0.5) +
-    draw_plot(shannonlos, x = 0.5, y = 0.5, width = 0.5, height = 0.5) +
-    draw_plot(shannon_groups_leg, x = 0.32, y = 0, width = 0.3, height = 0.5) +
-    draw_plot(shannoncontrol, x = 0, y = 0, width = 0.32, height = 0.5) +
+    draw_plot(shannoncontrol, x = 0, y = 0.5, width = 0.32, height = 0.5) +
+    draw_plot(shannonnec, x = 0.33, y = 0.5, width = 0.5, height = 0.5) +
+    draw_plot(shannonlos, x = 0.67, y = 0.5, width = 0.5, height = 0.5) +
+    draw_plot(shannon_groups_leg, x = 0.8, y = 0.5, width = 0.3, height = 0.5) +
     draw_plot_label(label = c("a", "b", "c"), 
-                    size = 15, 
-                    x = c(0, 0.5, 0), 
-                    y = c(1, 1, 0.5))
+                   size = 15, 
+                  x = c(0, 0.5, 0), 
+                   y = c(1, 1, 0.5))
   shannon_groups
+  #horizontal arrange of alpha diversity change over time plots for all groups
+  shannon_groups_ho <- plot_grid(shannoncontrol,shannonnec, shannonlos, 
+            rel_widths = c(0.64, 1, 1), 
+            scale = 0.89, 
+            nrow = 1, labels = "auto")
+  shannon_groups_horizontal <- plot_grid(shannon_groups_ho, shannon_groups_leg, 
+                                         ncol = 1, 
+                                         rel_heights = c(1, .2)) 
+  shannon_groups_horizontal
+  
   ##perform tests
     #inter-time-interval shannon diversity comparison of the same group
     #nec group
@@ -316,7 +326,7 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
     rremove("x.text") + rremove("x.ticks") 
   sobsleg <- ggpar(sobsleg, legend = "right")
   #get legend of the "merely for legend" plot :)
-  sobs_groups_leg <- get_legend(sobsleg) %>% as_ggplot()
+  sobs_groups_leg <- get_legend(sobsleg + theme(legend.position = "bottom")) %>% as_ggplot()
   sobs_groups_leg
   #ggarrange alpha diversity change over time plots for all groups
   sobs_groups <- ggdraw() +
@@ -329,6 +339,16 @@ meta_matrix_alpha <- inner_join(metadata, matrix_alpha, by = "sample")
                     x = c(0, 0.5, 0), 
                     y = c(1, 1, 0.5))
   sobs_groups
+  #horizontal sobs in one row
+  sobs_groups_ho <- plot_grid(sobscontrol,sobsnec, sobslos, 
+                              rel_widths = c(0.64, 1, 1), 
+                              scale = 0.89, 
+                              nrow = 1, labels = "auto")
+  sobs_groups_horizontal <- plot_grid(sobs_groups_ho, sobs_groups_leg, 
+                                      ncol = 1, 
+                                      rel_heights = c(1, .2)) 
+  sobs_groups_horizontal
+  
   
 
   

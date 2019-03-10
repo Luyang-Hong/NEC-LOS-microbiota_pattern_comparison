@@ -10,6 +10,9 @@ library(tidyverse) #for readr: read_csv
 library(stringr) # for function str_sub
 library(ggsci) #for palette color pick
 library(ggpubr) #for ggarrange common.legends
+library(cowplot) #for plot_grid
+library(magick) #for clipping plots 
+library(gridExtra) #for grid.arrange
 library(FSA) #for dunnTest
 library(agricolae) # for lsd test
 
@@ -153,11 +156,15 @@ pgroup_time <- ggarrange(pgenus_nec_time,
                          pgenus_los_time, 
                          pgenus_control_time, 
                          common.legend = TRUE, 
+                         nrow = 4,
+                         ncol = 1, 
                          legend = "bottom", 
                          labels = c('a', 'b', 'c'))
   # check the concatenate plot
   pgroup_time
-
+ 
+  # save separately for nec and los 4*10, for control 4*6.4
+  
 # statistical analysis of genus among group----------------------------------------------------
 # Utilize "goname" to get nomenclature of genus based on OTU 
   #matrix 1 OTU significant FROM ZIBR 736, 730, 51, 734, 728, 401, 743, 89, 774 
